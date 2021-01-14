@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	v1 "github.com/jenkins-x/jx-api/v3/pkg/apis/jenkins.io/v1"
-	v1fake "github.com/jenkins-x/jx-api/v3/pkg/client/clientset/versioned/fake"
+	jenkinsv1 "github.com/jenkins-x/jx-api/v4/pkg/apis/jenkins.io/v1"
+	v1fake "github.com/jenkins-x/jx-api/v4/pkg/client/clientset/versioned/fake"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/cmdrunner"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/cmdrunner/fakerunner"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/stringhelpers"
@@ -89,24 +89,24 @@ func AssertPromoteIntegration(t *testing.T, testCases ...PromoteTestCase) {
 		}
 		jxObjects := []runtime.Object{
 			devEnv,
-			&v1.Environment{
+			&jenkinsv1.Environment{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      envName,
 					Namespace: ns,
 				},
-				Spec: v1.EnvironmentSpec{
+				Spec: jenkinsv1.EnvironmentSpec{
 					Label:             strings.Title(envName),
 					Namespace:         "jx-" + envName,
-					PromotionStrategy: v1.PromotionStrategyTypeAutomatic,
-					Source: v1.EnvironmentRepository{
-						Kind: v1.EnvironmentRepositoryTypeGit,
+					PromotionStrategy: jenkinsv1.PromotionStrategyTypeAutomatic,
+					Source: jenkinsv1.EnvironmentRepository{
+						Kind: jenkinsv1.EnvironmentRepositoryTypeGit,
 						URL:  tc.gitURL,
 						Ref:  tc.gitRef,
 					},
 					Order:          0,
 					Kind:           "",
 					PullRequestURL: "",
-					TeamSettings:   v1.TeamSettings{},
+					TeamSettings:   jenkinsv1.TeamSettings{},
 					RemoteCluster:  tc.remote,
 				},
 			},
@@ -143,7 +143,7 @@ func AssertPromoteIntegration(t *testing.T, testCases ...PromoteTestCase) {
 		require.NoError(t, err, "failed to marshal PipelineActivity")
 
 		t.Logf("got PipelineActivity %s\n", string(data))
-		assert.Equal(t, v1.ActivityStatusTypeSucceeded, pa.Spec.Status, "pipelineActivity.Spec.Status")
+		assert.Equal(t, jenkinsv1.ActivityStatusTypeSucceeded, pa.Spec.Status, "pipelineActivity.Spec.Status")
 	}
 }
 

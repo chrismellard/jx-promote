@@ -6,12 +6,12 @@ import (
 	"sort"
 	"testing"
 
-	v1 "github.com/jenkins-x/jx-api/v3/pkg/apis/jenkins.io/v1"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/input/fake"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/testhelpers"
 	"github.com/jenkins-x/jx-promote/pkg/promote"
 	"github.com/stretchr/testify/assert"
 
+	jenkinsv1 "github.com/jenkins-x/jx-api/v4/pkg/apis/jenkins.io/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -96,28 +96,28 @@ func TestEnsureApplicationNameIsDefinedWithoutApplicationFlagUserSaysNo(t *testi
 func TestGetEnvChartValues(t *testing.T) {
 	tests := []struct {
 		ns           string
-		env          v1.Environment
+		env          jenkinsv1.Environment
 		values       []string
 		valueStrings []string
 	}{{
 		"jx-test-preview-pr-6",
-		v1.Environment{
+		jenkinsv1.Environment{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: "test-preview",
 			},
-			Spec: v1.EnvironmentSpec{
+			Spec: jenkinsv1.EnvironmentSpec{
 				Namespace:         "jx-test-preview-pr-6",
 				Label:             "Test preview",
-				Kind:              v1.EnvironmentKindTypePreview,
-				PromotionStrategy: v1.PromotionStrategyTypeAutomatic,
+				Kind:              jenkinsv1.EnvironmentKindTypePreview,
+				PromotionStrategy: jenkinsv1.PromotionStrategyTypeAutomatic,
 				PullRequestURL:    "https://github.com/my-project/my-app/pull/6",
 				Order:             999,
-				Source: v1.EnvironmentRepository{
-					Kind: v1.EnvironmentRepositoryTypeGit,
+				Source: jenkinsv1.EnvironmentRepository{
+					Kind: jenkinsv1.EnvironmentRepositoryTypeGit,
 					URL:  "https://github.com/my-project/my-app",
 					Ref:  "my-branch",
 				},
-				PreviewGitSpec: v1.PreviewGitSpec{
+				PreviewGitSpec: jenkinsv1.PreviewGitSpec{
 					ApplicationName: "my-app",
 					Name:            "6",
 					URL:             "https://github.com/my-project/my-app/pull/6",
@@ -141,18 +141,18 @@ func TestGetEnvChartValues(t *testing.T) {
 		},
 	}, {
 		"jx-custom-env",
-		v1.Environment{
+		jenkinsv1.Environment{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: "custom-env",
 			},
-			Spec: v1.EnvironmentSpec{
+			Spec: jenkinsv1.EnvironmentSpec{
 				Namespace:         "jx-custom-env",
 				Label:             "Custom environment",
-				Kind:              v1.EnvironmentKindTypePermanent,
-				PromotionStrategy: v1.PromotionStrategyTypeManual,
+				Kind:              jenkinsv1.EnvironmentKindTypePermanent,
+				PromotionStrategy: jenkinsv1.PromotionStrategyTypeManual,
 				Order:             5,
-				Source: v1.EnvironmentRepository{
-					Kind: v1.EnvironmentRepositoryTypeGit,
+				Source: jenkinsv1.EnvironmentRepository{
+					Kind: jenkinsv1.EnvironmentRepositoryTypeGit,
 					URL:  "https://github.com/my-project/jx-environment-custom-env",
 					Ref:  "master",
 				},
@@ -173,22 +173,22 @@ func TestGetEnvChartValues(t *testing.T) {
 		},
 	}, {
 		"ns-rand",
-		v1.Environment{
+		jenkinsv1.Environment{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: "random-env",
 			},
-			Spec: v1.EnvironmentSpec{
+			Spec: jenkinsv1.EnvironmentSpec{
 				Namespace:         "ns-other",
 				Label:             "Random environment",
-				Kind:              v1.EnvironmentKindTypeEdit,
-				PromotionStrategy: v1.PromotionStrategyTypeNever,
+				Kind:              jenkinsv1.EnvironmentKindTypeEdit,
+				PromotionStrategy: jenkinsv1.PromotionStrategyTypeNever,
 				Order:             666,
-				Source: v1.EnvironmentRepository{
-					Kind: v1.EnvironmentRepositoryTypeGit,
+				Source: jenkinsv1.EnvironmentRepository{
+					Kind: jenkinsv1.EnvironmentRepositoryTypeGit,
 					URL:  "https://github.com/my-project/random",
 					Ref:  "master",
 				},
-				PreviewGitSpec: v1.PreviewGitSpec{
+				PreviewGitSpec: jenkinsv1.PreviewGitSpec{
 					ApplicationName: "random",
 					Name:            "2",
 					URL:             "https://github.com/my-project/random/pull/6",

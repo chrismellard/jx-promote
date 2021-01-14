@@ -16,4 +16,4 @@ releases:
   name: myapp
   namespace: jx
 templates: {}
-missingFileHandler: ""
+renderedvalues: {}

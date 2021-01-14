@@ -12,8 +12,7 @@ import (
 	"time"
 
 	"github.com/jenkins-x/go-scm/scm"
-	"github.com/jenkins-x/jx-api/v3/pkg/client/clientset/versioned"
-	"github.com/jenkins-x/jx-api/v3/pkg/config"
+	"github.com/jenkins-x/jx-api/v4/pkg/client/clientset/versioned"
 	"github.com/jenkins-x/jx-gitops/pkg/cmd/git/setup"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/builds"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/files"
@@ -27,6 +26,7 @@ import (
 	"github.com/jenkins-x/jx-helpers/v3/pkg/kube/jxenv"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/kube/services"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/options"
+	"github.com/jenkins-x/jx-helpers/v3/pkg/requirements"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/stringhelpers"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/termcolor"
 	"github.com/jenkins-x/jx-promote/pkg/environments"
@@ -37,10 +37,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	v1 "github.com/jenkins-x/jx-api/v3/pkg/apis/jenkins.io/v1"
+	v1 "github.com/jenkins-x/jx-api/v4/pkg/apis/jenkins.io/v1"
 
 	"github.com/blang/semver"
-	typev1 "github.com/jenkins-x/jx-api/v3/pkg/client/clientset/versioned/typed/jenkins.io/v1"
+	typev1 "github.com/jenkins-x/jx-api/v4/pkg/client/clientset/versioned/typed/jenkins.io/v1"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/cobras/templates"
 	helm "github.com/jenkins-x/jx-helpers/v3/pkg/helmer"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/kube"
@@ -676,7 +676,7 @@ func (o *Options) ResolveChartRepositoryURL() (string, error) {
 			err = nil
 		}
 		if env != nil {
-			requirements, err := config.GetRequirementsConfigFromTeamSettings(&env.Spec.TeamSettings)
+			requirements, err := requirements.GetTeamSettingsRequirementsConfig(&env.Spec.TeamSettings)
 			if err != nil {
 				return answer, errors.Wrapf(err, "getting requirements from dev Environment")
 			}
@@ -1227,7 +1227,7 @@ func (o *Options) GetLatestPipelineBuild(pipeline string) (string, string, error
 		return "", "", errors.Wrapf(err, "failed to find dev env")
 	}
 	webhookEngine := devEnv.Spec.WebHookEngine
-	if webhookEngine == v1.WebHookEngineProw || webhookEngine == v1.WebHookEngineLighthouse {
+	if webhookEngine == v1.WebHookEngineLighthouse {
 		return pipeline, build, nil
 	}
 	return pipeline, build, nil

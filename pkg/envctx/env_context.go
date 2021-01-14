@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	v1 "github.com/jenkins-x/jx-api/v3/pkg/apis/jenkins.io/v1"
-	"github.com/jenkins-x/jx-api/v3/pkg/config"
+	"github.com/jenkins-x/jx-api/v4/pkg/apis/core/v4beta1"
+	v1 "github.com/jenkins-x/jx-api/v4/pkg/apis/jenkins.io/v1"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/kube"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/versionstream"
 )
@@ -16,7 +16,7 @@ type EnvironmentContext struct {
 	GitOps bool
 
 	// Requirements the installation requirements
-	Requirements *config.RequirementsConfig
+	Requirements *v4beta1.RequirementsConfig
 
 	// DevEnv the development environment
 	DevEnv *v1.Environment

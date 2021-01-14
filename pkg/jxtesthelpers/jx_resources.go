@@ -4,8 +4,8 @@ import (
 	"path"
 	"testing"
 
-	v1 "github.com/jenkins-x/jx-api/v3/pkg/apis/jenkins.io/v1"
-	"github.com/jenkins-x/jx-api/v3/pkg/config"
+	"github.com/jenkins-x/jx-api/v4/pkg/apis/core/v4beta1"
+	v1 "github.com/jenkins-x/jx-api/v4/pkg/apis/jenkins.io/v1"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/kube/jxenv"
 	"github.com/jenkins-x/jx-helpers/v3/pkg/versionstream"
 	"github.com/jenkins-x/jx-promote/pkg/envctx"
@@ -30,10 +30,9 @@ func CreateTestDevEnvironment(ns string) (*v1.Environment, error) {
 	return devEnv, err
 }
 
-func CreateTestRequirements(ns string) *config.RequirementsConfig {
-	req := config.NewRequirementsConfig()
-	req.Cluster.Namespace = ns
-	return req
+func CreateTestRequirements(ns string) *v4beta1.RequirementsConfig {
+	req := v4beta1.NewRequirementsConfig()
+	return &req.Spec
 }
 
 func CreateTestVersionResolver(t *testing.T) *versionstream.VersionResolver {
